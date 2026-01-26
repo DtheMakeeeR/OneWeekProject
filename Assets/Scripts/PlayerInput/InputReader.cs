@@ -63,7 +63,16 @@ namespace WeekProject
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            //noop
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                case InputActionPhase.Performed:
+                    Jump?.Invoke(true);
+                    break;
+                default:
+                    Jump?.Invoke(false);
+                    break;
+            }
         }
 
         public void OnLook(InputAction.CallbackContext context)
