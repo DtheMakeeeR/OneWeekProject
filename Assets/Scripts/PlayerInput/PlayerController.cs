@@ -20,12 +20,6 @@ namespace WeekProject
         [Header("Jumping")]
         [SerializeField]
         float _initialJumpVelocity;
-        [SerializeField]
-        float _maxJumpHeight;
-        [SerializeField]
-        float _maxJumpTime;
-        [SerializeField]
-        float _timeToApex = 0.3f;
 
         [Header("Gravity")]
         [SerializeField]
@@ -57,6 +51,25 @@ namespace WeekProject
         int _isSprintingHash;
         int _isJumpingHash;
 
+
+        public Animator Animator { get => _animator; }
+        public int IsWalkingHash { get => _isWalkingHash; }
+        public int IsSprintingHash { get => _isSprintingHash; }
+        public int IsJumpingHash { get => _isJumpingHash; }
+
+        public CharacterController CharacterController { get => _characterController; }
+
+        public Vector3 MoveInput { get => _moveInput; set => _moveInput = value; }
+        public float Gravity { get => _gravity; set => _gravity = value; }
+        public float GroundGravity { get => _groundGravity; set => _groundGravity = value; }
+        public float FallMultiplier => _fallMultiplier;
+        public float InitialJumpVelocity { get => _initialJumpVelocity; set => _initialJumpVelocity = value; }
+        public float StoredYVelocity { get => _storedYVelocity; set => _storedYVelocity = value; }
+
+
+        public bool IsJumpPressed { get => _isJumpPressed; set => _isJumpPressed = value; }
+
+
         private void Awake()
         {
             _isWalkingHash = Animator.StringToHash("isWalking");
@@ -82,10 +95,10 @@ namespace WeekProject
         private void Update()
         {
             HandleRotation();
-            HandleAnimation();
+            //HandleAnimation();
             Move();
-            HandleGravity();
-            HandleJump();
+            //HandleGravity();
+            //HandleJump();
         }
 
         private void HandleAnimation()
@@ -125,45 +138,31 @@ namespace WeekProject
 
         private void HandleGravity()
         {
-            bool isFalling = _moveInput.y <= 0.0f || !_isJumpPressed;
-            if(_characterController.isGrounded)
-            {
-                _animator.SetBool(_isJumpingHash, false);
-                _moveInput.y = _groundGravity;
-            }
-            else if(isFalling)
-            {
-                float previousYVelocity = _storedYVelocity;
-                _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime * _fallMultiplier);
-                float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
-                _moveInput.y = nextYVelocity;
-            }
-            else
-            {
-                Debug.Log("***");
-                float previousYVelocity = _storedYVelocity;
-                _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime);
-                float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
-                _moveInput.y = nextYVelocity;
-            }
+            //bool isFalling = _moveInput.y <= 0.0f || !_isJumpPressed;
+            //if(isFalling)
+            //{
+            //    float previousYVelocity = _storedYVelocity;
+            //    _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime * _fallMultiplier);
+            //    float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
+            //    _moveInput.y = nextYVelocity;
+            //}
+            //else
+            //{
+            //    float previousYVelocity = _storedYVelocity;
+            //    _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime);
+            //    float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
+            //    _moveInput.y = nextYVelocity;
+            //}
         }
 
         private void HandleJump()
         {
-            Debug.Log($"IsGounded:{_characterController.isGrounded}");
-            Debug.Log($"_isJumpPressed:{_isJumpPressed}");
-            Debug.Log($"_isJumping:{_isJumping}");
             if(!_isJumping && _isJumpPressed && _characterController.isGrounded)
             {
-                _isJumping = true;
-                _animator.SetBool(_isJumpingHash, true);
-                //float previousYVelocity = _moveInput.y;
-                //float newYVelocity = _moveInput.y + _initialJumpVelocity;
-                //float nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
-
-                //previous velocity is zero cuz was grounded
-                _moveInput.y = _initialJumpVelocity;
-                _storedYVelocity = _initialJumpVelocity;
+                //_isJumping = true;
+                //_animator.SetBool(_isJumpingHash, true);
+                //_moveInput.y = _initialJumpVelocity;
+                //_storedYVelocity = _initialJumpVelocity;
             }
             else if(_isJumping && _characterController.isGrounded)
             {
