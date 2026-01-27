@@ -17,13 +17,13 @@ namespace WeekProject
         public override void EnterState()
         {
             Debug.Log("Fall State");
-            Controller.Animator.SetBool(Controller.IsFallingHash, false);
+            Controller.Animator.SetBool(Controller.IsFallingHash, true);
         }
 
         public override void ExitState()
         {
             Debug.Log("Exit Fall");
-            Controller.Animator.SetBool(Controller.IsFallingHash, true);
+            Controller.Animator.SetBool(Controller.IsFallingHash, false);
         }
 
         public override void InitializeSubState()
@@ -44,6 +44,7 @@ namespace WeekProject
 
         public override void UpdateState()
         {
+            CheckSwitchStates();
             HandleGravity();
         }
         private void HandleGravity()

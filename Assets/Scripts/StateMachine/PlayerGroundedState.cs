@@ -12,6 +12,7 @@ namespace WeekProject
         {
             if (Controller.IsJumpPressed)
             {
+                Debug.Log("JUMP IS PRESSED IN GROUNDED");
                 SwitchState(Factory.Jump());
             }
             else if(!Controller.CharacterController.isGrounded)
@@ -50,7 +51,7 @@ namespace WeekProject
         public override void UpdateState()
         {
             CheckSwitchStates();
-            Controller.MoveInputY = Controller.GroundGravity;
+            //Controller.MoveInputY = Controller.GroundGravity;
         }
     }
 }

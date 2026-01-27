@@ -7,6 +7,10 @@ namespace WeekProject
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("Camera")]
+        [SerializeField]
+        Camera _camera;
+
         [Header("Movement")]
         [SerializeField]
         float _walkSpeed = 5f;
@@ -47,7 +51,6 @@ namespace WeekProject
         bool _isSprintPressed = false;
         bool _isAttacking = false;
         bool _isJumpPressed = false;
-        bool _isJumping = false;
 
         int _isWalkingHash;
         int _isSprintingHash;
@@ -114,19 +117,17 @@ namespace WeekProject
             };
             _input.EnablePlayerActions();
         }
+        //
         private void LateUpdate()
         {
             HandleRotation();
-            //HandleAnimation();
             Move();
-            //HandleGravity();
-            //HandleJump();
         }
 
         private void HandleRotation()
         {
             Vector3 positionToLookAt;
-            positionToLookAt = _moveInput.With(y: 0);
+            positionToLookAt = ConvertToCameraSpace(_moveInput.With(y: 0));
             Quaternion currentRotation = transform.rotation;
             if (_isMovementPressed)
             {
@@ -138,19 +139,25 @@ namespace WeekProject
         private void Move()
         {
             Vector3 moveDir;
-            //if (_isSprintPressed) 
-            //{ 
-            //    moveDir = (_moveInput * _moveSpeed).With(y: 0) * _sprintMultiplier;
-            //    moveDir.y = _moveInput.y;
-            //}
-            //else
-            //{
-            //    moveDir = (_moveInput * _moveSpeed).With(y: _moveInput.y);
-            //    moveDir.y = _moveInput.y;
-            //}
             moveDir = (_moveInput * _moveSpeed).With(y: _moveInput.y);
             moveDir.y = _moveInput.y;
+            moveDir = ConvertToCameraSpace(moveDir);
             _characterController.Move(moveDir * Time.deltaTime);
+        }
+
+        private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+        {
+            float curY = vectorToRotate.y;
+            //ignores Y axis and 1f length
+            Vector3 cameraForward = _camera.transform.forward.With(y:0).normalized;
+            Vector3 cameraRight = _camera.transform.right.With(y: 0).normalized;
+
+            Vector3 cameraForwardZProduct = vectorToRotate.z * cameraForward;
+            Vector3 cameraRightXProduct = vectorToRotate.x * cameraRight;
+
+            Vector3 res = cameraForwardZProduct + cameraRightXProduct;
+            res.y = curY;
+            return res;
         }
     }
 }

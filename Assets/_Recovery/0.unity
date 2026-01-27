@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.822823, z: -0.8648677}
+  m_LocalPosition: {x: 0, y: 4.87, z: 0.95000005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -550,7 +550,6 @@ GameObject:
   - component: {fileID: 471807648}
   - component: {fileID: 471807650}
   - component: {fileID: 471807651}
-  - component: {fileID: 471807652}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -635,21 +634,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeekProject.PlayerStateMachine
   _playerController: {fileID: 471807648}
---- !u!114 &471807652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471807647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f807889ca6fde5944b36ffc033cccd14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeekProject.IKFoots
-  _animator: {fileID: 942735179}
-  _distanceToGround: 0.1
-  _distanceToMidOfFoot: 0.1
 --- !u!1 &625666763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,7 +1098,7 @@ Transform:
   m_GameObject: {fileID: 1458177964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.822823, z: -0.8648677}
+  m_LocalPosition: {x: 0, y: 4.87, z: 0.95000005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1221,7 +1205,7 @@ MonoBehaviour:
   TiltAxis:
     Value: 0
     Center: 0
-    Range: {x: -10, y: 50}
+    Range: {x: -30, y: 50}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -1240,15 +1224,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineOrbitalFollow
-  TargetOffset: {x: 0, y: 2, z: 0}
+  TargetOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 0.5, y: 0.5, z: 0}
+    PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  OrbitStyle: 0
-  Radius: 4
+  OrbitStyle: 1
+  Radius: 5
   Orbits:
     Top:
       Radius: 1
@@ -1274,7 +1258,7 @@ MonoBehaviour:
   VerticalAxis:
     Value: 17.5
     Center: 17.5
-    Range: {x: -10, y: 35}
+    Range: {x: -10, y: 45}
     Wrap: 0
     Recentering:
       Enabled: 0
