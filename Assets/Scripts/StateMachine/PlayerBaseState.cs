@@ -28,7 +28,7 @@ namespace WeekProject
         public abstract void CheckSwitchStates();
         public abstract void InitializeSubState();
 
-        protected void UpdateStates()
+        public void UpdateStates()
         {
             UpdateState();
             CurrentSubState?.UpdateStates();
@@ -50,11 +50,13 @@ namespace WeekProject
         }
         protected void SetSuperState(PlayerBaseState newSuperState)
         {
+            if (_currentSuperState == newSuperState) return;
             _currentSuperState = newSuperState;
-            //newSuperState.SetSubState (this);
+            newSuperState.SetSubState(this);
         }
         protected void SetSubState(PlayerBaseState newSubState)
         {
+            if (_currentSubState == newSubState) return;
             _currentSubState = newSubState;
             newSubState.SetSuperState(this);
         }

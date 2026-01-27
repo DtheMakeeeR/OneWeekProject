@@ -1,3 +1,5 @@
+using System;
+
 namespace WeekProject
 {
     public class PlayerStateFactory
@@ -15,9 +17,9 @@ namespace WeekProject
         {
             return new PlayerWalkState(_context, this);
         }
-        public PlayerBaseState Run()
+        public PlayerBaseState Sprint()
         {
-            return new PlayerRunState(_context, this);
+            return new PlayerSprintState(_context, this);
         }
         public PlayerBaseState Jump()
         {
@@ -26,6 +28,11 @@ namespace WeekProject
         public PlayerBaseState Grounded()
         {
             return new PlayerGroundedState(_context, this);
+        }
+
+        internal PlayerBaseState Fall()
+        {
+            return new PlayerFallState(_context, this);
         }
     }
 }

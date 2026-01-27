@@ -8,12 +8,18 @@ namespace WeekProject
         public PlayerJumpState(PlayerStateMachine ctx, PlayerStateFactory factory, bool isRoot = true)
             : base(ctx, factory, isRoot) { }
 
+        bool IsFalling => Controller.MoveInput.y <= 0.0f || !Controller.IsJumpPressed;
+
         public override void CheckSwitchStates()
         {
             if(Controller.CharacterController.isGrounded)
             {
                 SwitchState(Factory.Grounded());
             }
+            else if(IsFalling)
+            {
+                SwitchState(Factory.Fall());
+            }    
         }
 
         public override void EnterState()
@@ -25,25 +31,17 @@ namespace WeekProject
         private void HandleJump()
         {
             Controller.Animator.SetBool(Controller.IsJumpingHash, true);
-            Controller.MoveInput = Controller.MoveInput.With(y: Controller.InitialJumpVelocity);
+            Controller.MoveInputY = Controller.InitialJumpVelocity;
             Controller.StoredYVelocity = Controller.InitialJumpVelocity;
         }
         private void HandleGravity()
         {
-            bool isFalling = Controller.MoveInput.y <= 0.0f || !Controller.IsJumpPressed;
-            if (isFalling)
-            {
-                float previousYVelocity = Controller.StoredYVelocity;
-                Controller.StoredYVelocity = Controller.StoredYVelocity + (Controller.Gravity * Time.deltaTime * Controller.FallMultiplier);
-                float nextYVelocity = (previousYVelocity + Controller.StoredYVelocity) * 0.5f;
-                Controller.MoveInput = Controller.MoveInput.With(y:nextYVelocity);
-            }
-            else
+            if(!IsFalling)
             {
                 float previousYVelocity = Controller.StoredYVelocity;
                 Controller.StoredYVelocity = Controller.StoredYVelocity + (Controller.Gravity * Time.deltaTime);
                 float nextYVelocity = (previousYVelocity + Controller.StoredYVelocity) * 0.5f;
-                Controller.MoveInput = Controller.MoveInput.With(y: nextYVelocity);
+                Controller.MoveInputY = nextYVelocity;
             }
         }
         public override void ExitState()
@@ -54,7 +52,18 @@ namespace WeekProject
 
         public override void InitializeSubState()
         {
-            
+            if(!Controller.IsMovementPressed)
+            {
+                SetSubState(Factory.Idle());
+            }
+            else if(!Controller.IsSprintPressed)
+            {
+                SetSubState(Factory.Walk());
+            }
+            else
+            {
+                SetSubState(Factory.Sprint());
+            }
         }
 
         public override void UpdateState()

@@ -9,7 +9,7 @@ namespace WeekProject
     {
         [Header("Movement")]
         [SerializeField]
-        float _moveSpeed = 5f;
+        float _walkSpeed = 5f;
         [SerializeField]
         float _sprintMultiplier = 1.5f;
 
@@ -39,6 +39,8 @@ namespace WeekProject
 
         Vector3 _moveInput;
 
+        float _moveSpeed;
+
         float _storedYVelocity = 0f;
 
         bool _isMovementPressed = false;
@@ -50,16 +52,26 @@ namespace WeekProject
         int _isWalkingHash;
         int _isSprintingHash;
         int _isJumpingHash;
+        int _isFallingHash;
 
 
         public Animator Animator { get => _animator; }
         public int IsWalkingHash { get => _isWalkingHash; }
         public int IsSprintingHash { get => _isSprintingHash; }
         public int IsJumpingHash { get => _isJumpingHash; }
+        public int IsFallingHash { get => _isFallingHash; }
 
         public CharacterController CharacterController { get => _characterController; }
-
+        public bool IsMovementPressed { get => _isMovementPressed; }
+        public bool IsSprintPressed { get => _isSprintPressed; }
         public Vector3 MoveInput { get => _moveInput; set => _moveInput = value; }
+        public float MoveInputX { get => _moveInput.x; set => _moveInput.x = value; }
+        public float MoveInputY { get => _moveInput.y; set => _moveInput.y = value; }
+        public float MoveInputZ { get => _moveInput.z; set => _moveInput.z = value; }
+
+        public float WalkSpeed { get => _walkSpeed; }
+        public float SprintMultiplier { get => _sprintMultiplier; }
+        public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
         public float Gravity { get => _gravity; set => _gravity = value; }
         public float GroundGravity { get => _groundGravity; set => _groundGravity = value; }
         public float FallMultiplier => _fallMultiplier;
@@ -75,7 +87,7 @@ namespace WeekProject
             _isWalkingHash = Animator.StringToHash("isWalking");
             _isSprintingHash = Animator.StringToHash("isSprinting");
             _isJumpingHash = Animator.StringToHash("isJumping");
-            //PrepareJumpVariables();
+            _isFallingHash = Animator.StringToHash("isFalling");
         }
 
 
@@ -85,43 +97,30 @@ namespace WeekProject
             {
                 _moveInput.x = direction.x;
                 _moveInput.z = direction.y;
+                //Debug.Log($"direction.x: {direction.x}");
+                //Debug.Log($"direction.y: {direction.y}");
+                //Debug.Log($"_moveInput1: {_moveInput}");
+                _moveInput = _moveInput.With(y: 0).normalized.With(y: _moveInput.y);
+                //Debug.Log($"_moveInput2: {_moveInput}");
                 _isMovementPressed = _moveInput.With(y:0).magnitude > 0.01f;
+                //Debug.Log($"_moveInput3: {_moveInput}");
             };
             _input.Sprint += val => _isSprintPressed = val;
             _input.Attack += val => _isAttacking = val;
-            _input.Jump += val => _isJumpPressed = val;
+            _input.Jump += val =>
+            {
+                _isJumpPressed = val;
+                Debug.Log("JUMP PRESSED");
+            };
             _input.EnablePlayerActions();
         }
-        private void Update()
+        private void LateUpdate()
         {
             HandleRotation();
             //HandleAnimation();
             Move();
             //HandleGravity();
             //HandleJump();
-        }
-
-        private void HandleAnimation()
-        {
-            bool isWalking = _animator.GetBool(_isWalkingHash);
-            bool isSprinting = _animator.GetBool(_isSprintingHash);
-
-            if(_isMovementPressed && !isWalking)
-            {
-                _animator.SetBool(_isWalkingHash, true);
-            }
-            else if(!_isMovementPressed && isWalking)
-            {
-                _animator.SetBool(_isWalkingHash, false);
-            }
-            if((_isMovementPressed && _isSprintPressed) && !isSprinting)
-            {
-                _animator.SetBool(_isSprintingHash, true);
-            }
-            else if((!_isMovementPressed || !_isSprintPressed) && isSprinting)
-            {
-                _animator.SetBool(_isSprintingHash, false);
-            }
         }
 
         private void HandleRotation()
@@ -136,50 +135,22 @@ namespace WeekProject
             }
         }
 
-        private void HandleGravity()
+        private void Move()
         {
-            //bool isFalling = _moveInput.y <= 0.0f || !_isJumpPressed;
-            //if(isFalling)
-            //{
-            //    float previousYVelocity = _storedYVelocity;
-            //    _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime * _fallMultiplier);
-            //    float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
-            //    _moveInput.y = nextYVelocity;
+            Vector3 moveDir;
+            //if (_isSprintPressed) 
+            //{ 
+            //    moveDir = (_moveInput * _moveSpeed).With(y: 0) * _sprintMultiplier;
+            //    moveDir.y = _moveInput.y;
             //}
             //else
             //{
-            //    float previousYVelocity = _storedYVelocity;
-            //    _storedYVelocity = _storedYVelocity + (_gravity * Time.deltaTime);
-            //    float nextYVelocity = (previousYVelocity + _storedYVelocity) * 0.5f;
-            //    _moveInput.y = nextYVelocity;
+            //    moveDir = (_moveInput * _moveSpeed).With(y: _moveInput.y);
+            //    moveDir.y = _moveInput.y;
             //}
-        }
-
-        private void HandleJump()
-        {
-            if(!_isJumping && _isJumpPressed && _characterController.isGrounded)
-            {
-                //_isJumping = true;
-                //_animator.SetBool(_isJumpingHash, true);
-                //_moveInput.y = _initialJumpVelocity;
-                //_storedYVelocity = _initialJumpVelocity;
-            }
-            else if(_isJumping && _characterController.isGrounded)
-            {
-                _isJumping = false;
-            }
-        }
-
-        private void Move()
-        {
-            var moveDir = (_moveInput * _moveSpeed).With(y:_moveInput.y);
-            if (_isSprintPressed) 
-            { 
-                moveDir *= _sprintMultiplier;
-            }
+            moveDir = (_moveInput * _moveSpeed).With(y: _moveInput.y);
+            moveDir.y = _moveInput.y;
             _characterController.Move(moveDir * Time.deltaTime);
         }
-
-
     }
 }

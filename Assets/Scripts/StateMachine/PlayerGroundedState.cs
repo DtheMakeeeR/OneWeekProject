@@ -14,12 +14,16 @@ namespace WeekProject
             {
                 SwitchState(Factory.Jump());
             }
+            else if(!Controller.CharacterController.isGrounded)
+            {
+                SwitchState(Factory.Fall());
+            }
         }
 
         public override void EnterState()
         {
             Debug.Log("Grounded State");
-            Controller.MoveInput = Controller.MoveInput.With(y: Controller.GroundGravity);
+            Controller.MoveInputY = Controller.GroundGravity;
         }
 
         public override void ExitState()
@@ -29,12 +33,24 @@ namespace WeekProject
 
         public override void InitializeSubState()
         {
-            
+            if (!Controller.IsMovementPressed)
+            {
+                SetSubState(Factory.Idle());
+            }
+            else if (!Controller.IsSprintPressed)
+            {
+                SetSubState(Factory.Walk());
+            }
+            else
+            {
+                SetSubState(Factory.Sprint());
+            }
         }
 
         public override void UpdateState()
         {
             CheckSwitchStates();
+            Controller.MoveInputY = Controller.GroundGravity;
         }
     }
 }
