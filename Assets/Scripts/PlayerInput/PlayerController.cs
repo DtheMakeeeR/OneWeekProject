@@ -40,6 +40,8 @@ namespace WeekProject
         CharacterController _characterController;
         [SerializeField]
         Animator _animator;
+        [SerializeField]
+        CameraController _cameraController;
 
         Vector3 _moveInput;
 
@@ -114,6 +116,11 @@ namespace WeekProject
             {
                 _isJumpPressed = val;
                 Debug.Log("JUMP PRESSED");
+            };
+            _input.Lock += () =>
+            {
+                Debug.Log("LOCK PRESSED");
+                _cameraController.FindTarget();
             };
             _input.EnablePlayerActions();
         }

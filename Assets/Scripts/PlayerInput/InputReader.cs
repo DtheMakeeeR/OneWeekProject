@@ -17,6 +17,7 @@ namespace WeekProject
         public UnityAction<bool> Jump = delegate { };
         public UnityAction<bool> Attack = delegate { };
         public UnityAction<bool> Sprint = delegate { };
+        public UnityAction Lock = delegate { };
 
         InputSystem_Actions _inputActions;
         public Vector2 Direction => _inputActions.Player.Move.ReadValue<Vector2>();
@@ -100,6 +101,19 @@ namespace WeekProject
                     break;
                 default:
                     Sprint?.Invoke(false);
+                    break;
+            }
+        }
+
+        public void OnLock(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    Lock?.Invoke();
+                    break;
+                default:
+                    Lock?.Invoke();
                     break;
             }
         }
