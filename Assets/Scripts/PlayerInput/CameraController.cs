@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UIElements;
 using System.Linq;
+using System;
 namespace WeekProject
 {
     public class CameraController : MonoBehaviour
@@ -10,7 +11,13 @@ namespace WeekProject
         [SerializeField]
         Camera _mainCamera;
         [SerializeField]
-        CinemachineCamera _cinemachine;
+        CinemachineCamera _freeCinemachine;
+        [SerializeField]
+        CinemachineCamera _lockedCinemachine;
+
+        [Header("Player")]
+        [SerializeField]
+        Transform _player;
 
         [Header("Camera Ofset")]
         [SerializeField]
@@ -24,6 +31,7 @@ namespace WeekProject
         [SerializeField]
         LayerMask _layerMask;
 
+        public Transform Target => _target;
 
         Transform _target;
         bool _isLocked;
@@ -37,12 +45,13 @@ namespace WeekProject
                 _isLocked = value;
                 if(IsLocked)
                 {
-                    _cinemachine.enabled = false;
+                    //_freeCinemachine.enabled = false;
                 }
                 else
                 {
                     _target = null;
-                    _cinemachine.enabled = true;
+                    //_freeCinemachine.enabled = true;
+                    _lockedCinemachine.Target.LookAtTarget = _player;
                 }
             }
         }
@@ -50,8 +59,14 @@ namespace WeekProject
         {
             if(IsLocked)
             {
-                RotateToTarget();
+                //RotateToTarget();
+                //SetCameraPos();
             }
+        }
+
+        private void SetCameraPos()
+        {
+            _lockedCinemachine.transform.position = _player.position + _player.InverseTransformDirection(_cameraOfset);
         }
 
         private void RotateToTarget()
@@ -74,6 +89,7 @@ namespace WeekProject
             if (_target != null)
             {
                 IsLocked = true;
+                _lockedCinemachine.Target.LookAtTarget = _target;
             }
         }
     }

@@ -58,6 +58,7 @@ namespace WeekProject
         int _isSprintingHash;
         int _isJumpingHash;
         int _isFallingHash;
+        int _isLockedHash;
 
 
         public Animator Animator { get => _animator; }
@@ -65,8 +66,10 @@ namespace WeekProject
         public int IsSprintingHash { get => _isSprintingHash; }
         public int IsJumpingHash { get => _isJumpingHash; }
         public int IsFallingHash { get => _isFallingHash; }
+        public int IsLockedHash { get => _isLockedHash; }
 
         public CharacterController CharacterController { get => _characterController; }
+        public CameraController CameraController { get => _cameraController; }
         public bool IsMovementPressed { get => _isMovementPressed; }
         public bool IsSprintPressed { get => _isSprintPressed; }
         public Vector3 MoveInput { get => _moveInput; set => _moveInput = value; }
@@ -93,6 +96,7 @@ namespace WeekProject
             _isSprintingHash = Animator.StringToHash("isSprinting");
             _isJumpingHash = Animator.StringToHash("isJumping");
             _isFallingHash = Animator.StringToHash("isFalling");
+            _isLockedHash = Animator.StringToHash("isLocked");
         }
 
 
@@ -134,7 +138,14 @@ namespace WeekProject
         private void HandleRotation()
         {
             Vector3 positionToLookAt;
-            positionToLookAt = ConvertToCameraSpace(_moveInput.With(y: 0));
+            if (CameraController.IsLocked)
+            {
+                positionToLookAt = CameraController.Target.position.With(y:0) - transform.position.With(y: 0);
+            }
+            else
+            {
+                positionToLookAt = ConvertToCameraSpace(_moveInput.With(y: 0));
+            }            
             Quaternion currentRotation = transform.rotation;
             if (_isMovementPressed)
             {

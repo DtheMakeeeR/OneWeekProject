@@ -30,9 +30,19 @@ namespace WeekProject
             return new PlayerGroundedState(_context, this);
         }
 
-        internal PlayerBaseState Fall()
+        public PlayerBaseState Fall()
         {
             return new PlayerFallState(_context, this);
+        }
+
+        public PlayerBaseState Locked()
+        {
+            return new PlayerLockedState(_context, this);
+        }
+
+        public PlayerBaseState Free()
+        {
+            return new PlayerFreeState(_context, this);
         }
     }
 }

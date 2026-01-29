@@ -30,6 +30,7 @@ namespace WeekProject
 
         public void UpdateStates()
         {
+            Debug.Log($"SuperState:{CurrentSuperState} CurState:{ToString()} SubState:{CurrentSubState}");
             UpdateState();
             CurrentSubState?.UpdateStates();
         }
@@ -39,9 +40,10 @@ namespace WeekProject
 
             newState.EnterState();
 
-            if(_isRootState)
+            if(CurrentSuperState == null)
             {
                 _ctx.CurrentState = newState;
+                newState.SetSubState(CurrentSubState);
             }
             else
             {

@@ -16,7 +16,7 @@ namespace WeekProject
         private void Awake()
         {
             _states = new PlayerStateFactory(this);
-            _currentState = _states.Grounded();
+            _currentState = _states.Free();
             _currentState.EnterState();
         }
         private void Update()
