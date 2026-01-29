@@ -28,6 +28,8 @@ namespace WeekProject
 
         public override void ExitState()
         {
+            Controller.Animator.SetBool(Controller.IsWalkingHash, true);
+            Controller.Animator.SetBool(Controller.IsSprintingHash, false);
             Debug.Log("Sprint Exit");
 
         }

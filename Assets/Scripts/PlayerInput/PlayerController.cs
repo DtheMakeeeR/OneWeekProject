@@ -49,6 +49,8 @@ namespace WeekProject
 
         float _storedYVelocity = 0f;
 
+        bool _needToRotate;
+
         bool _isMovementPressed = false;
         bool _isSprintPressed = false;
         bool _isAttacking = false;
@@ -62,7 +64,6 @@ namespace WeekProject
         int _mirrorSideWalkHash;
         int _XDirHash;
         int _ZDirHash;
-
 
         public Animator Animator { get => _animator; }
         public int IsWalkingHash { get => _isWalkingHash; }
@@ -151,11 +152,11 @@ namespace WeekProject
         private void HandleRotation()
         {
             Vector3 positionToLookAt;
-            if (CameraController.IsLocked)
+            if (CameraController.IsLocked && !_needToRotate)
             {
                 positionToLookAt = CameraController.Target.position.With(y:0) - transform.position.With(y: 0);
             }
-            else
+            else 
             {
                 positionToLookAt = ConvertToCameraSpace(_moveInput.With(y: 0));
             }            
