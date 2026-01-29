@@ -59,6 +59,7 @@ namespace WeekProject
         int _isJumpingHash;
         int _isFallingHash;
         int _isLockedHash;
+        int _mirrorSideWalkHash;
 
 
         public Animator Animator { get => _animator; }
@@ -67,6 +68,7 @@ namespace WeekProject
         public int IsJumpingHash { get => _isJumpingHash; }
         public int IsFallingHash { get => _isFallingHash; }
         public int IsLockedHash { get => _isLockedHash; }
+        public int MirrorSideWalk { get => _mirrorSideWalkHash; }
 
         public CharacterController CharacterController { get => _characterController; }
         public CameraController CameraController { get => _cameraController; }
@@ -97,6 +99,7 @@ namespace WeekProject
             _isJumpingHash = Animator.StringToHash("isJumping");
             _isFallingHash = Animator.StringToHash("isFalling");
             _isLockedHash = Animator.StringToHash("isLocked");
+            _mirrorSideWalkHash = Animator.StringToHash("mirrorSideWalk");
         }
 
 
@@ -106,6 +109,9 @@ namespace WeekProject
             {
                 _moveInput.x = direction.x;
                 _moveInput.z = direction.y;
+                
+                _animator.SetBool(MirrorSideWalk, direction.x < 0);
+                                
                 //Debug.Log($"direction.x: {direction.x}");
                 //Debug.Log($"direction.y: {direction.y}");
                 //Debug.Log($"_moveInput1: {_moveInput}");
