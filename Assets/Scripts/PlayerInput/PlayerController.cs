@@ -60,6 +60,8 @@ namespace WeekProject
         int _isFallingHash;
         int _isLockedHash;
         int _mirrorSideWalkHash;
+        int _XDirHash;
+        int _ZDirHash;
 
 
         public Animator Animator { get => _animator; }
@@ -69,6 +71,8 @@ namespace WeekProject
         public int IsFallingHash { get => _isFallingHash; }
         public int IsLockedHash { get => _isLockedHash; }
         public int MirrorSideWalk { get => _mirrorSideWalkHash; }
+        public int XDir { get => _XDirHash; }
+        public int ZDir { get => _ZDirHash; }
 
         public CharacterController CharacterController { get => _characterController; }
         public CameraController CameraController { get => _cameraController; }
@@ -100,6 +104,8 @@ namespace WeekProject
             _isFallingHash = Animator.StringToHash("isFalling");
             _isLockedHash = Animator.StringToHash("isLocked");
             _mirrorSideWalkHash = Animator.StringToHash("mirrorSideWalk");
+            _ZDirHash = Animator.StringToHash("ZDir");
+            _XDirHash = Animator.StringToHash("XDir");
         }
 
 
@@ -111,7 +117,8 @@ namespace WeekProject
                 _moveInput.z = direction.y;
                 
                 _animator.SetBool(MirrorSideWalk, direction.x < 0);
-                                
+                _animator.SetFloat(_XDirHash, direction.x);          
+                _animator.SetFloat(_ZDirHash, direction.y);          
                 //Debug.Log($"direction.x: {direction.x}");
                 //Debug.Log($"direction.y: {direction.y}");
                 //Debug.Log($"_moveInput1: {_moveInput}");
@@ -153,7 +160,7 @@ namespace WeekProject
                 positionToLookAt = ConvertToCameraSpace(_moveInput.With(y: 0));
             }            
             Quaternion currentRotation = transform.rotation;
-            if (_isMovementPressed)
+            if (_isMovementPressed || CameraController.IsLocked)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
                 transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationFactorPerFrame);

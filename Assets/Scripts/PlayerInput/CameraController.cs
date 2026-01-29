@@ -15,6 +15,13 @@ namespace WeekProject
         [SerializeField]
         CinemachineCamera _lockedCinemachine;
 
+        [Header("Free Look Controls")]
+        [SerializeField]
+        CinemachineOrbitalFollow _orbitalFollow;
+        [SerializeField]
+        CinemachineRotationComposer _rotationComposer;
+
+
         [Header("Player")]
         [SerializeField]
         Transform _player;
@@ -45,13 +52,20 @@ namespace WeekProject
                 _isLocked = value;
                 if(IsLocked)
                 {
+                    _orbitalFollow.enabled = false;
+                    _rotationComposer.enabled = false;
+                    _freeCinemachine.enabled = false;
                     //_freeCinemachine.enabled = false;
                 }
                 else
                 {
+                    _orbitalFollow.enabled = true;
+                    _rotationComposer.enabled = true;
+                    _freeCinemachine.enabled = true;
                     _target = null;
                     //_freeCinemachine.enabled = true;
                     _lockedCinemachine.Target.LookAtTarget = _player;
+                    _freeCinemachine.Target.LookAtTarget = _player;
                 }
             }
         }
@@ -59,21 +73,18 @@ namespace WeekProject
         {
             if(IsLocked)
             {
+                MakeFreeAsLocked();
                 //RotateToTarget();
                 //SetCameraPos();
             }
         }
 
-        private void SetCameraPos()
-        {
-            _lockedCinemachine.transform.position = _player.position + _player.InverseTransformDirection(_cameraOfset);
-        }
 
-        private void RotateToTarget()
+        private void MakeFreeAsLocked()
         {
-            var lookDir = _target.position - transform.position;
-            Quaternion lookRot = Quaternion.LookRotation(lookDir);
-            _mainCamera.transform.rotation = Quaternion.Slerp(_mainCamera.transform.rotation, lookRot, _smooth);
+            _freeCinemachine.ForceCameraPosition(_lockedCinemachine.transform.position, _lockedCinemachine.transform.rotation);
+            //_freeCinemachine.transform.position = _lockedCinemachine.transform.position;
+            //_freeCinemachine.transform.rotation = _lockedCinemachine.transform.rotation;
         }
         public void FindTarget()
         {
@@ -90,6 +101,7 @@ namespace WeekProject
             {
                 IsLocked = true;
                 _lockedCinemachine.Target.LookAtTarget = _target;
+                //_freeCinemachine.Target.LookAtTarget = _target;
             }
         }
     }

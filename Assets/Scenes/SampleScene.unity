@@ -427,6 +427,8 @@ MonoBehaviour:
   _mainCamera: {fileID: 330585545}
   _freeCinemachine: {fileID: 1458177965}
   _lockedCinemachine: {fileID: 1299970286}
+  _orbitalFollow: {fileID: 1458177969}
+  _rotationComposer: {fileID: 1458177970}
   _player: {fileID: 471807649}
   _cameraOfset: {x: 0, y: 2, z: -2}
   _smooth: 0.01
@@ -1127,8 +1129,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299970283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29417127, y: 0, z: 0, w: 0.95575273}
-  m_LocalPosition: {x: 2.44561, y: 13.838809, z: -9.76144}
+  m_LocalRotation: {x: 0.22975294, y: 0, z: 0, w: 0.973249}
+  m_LocalPosition: {x: 2.44561, y: 14.478809, z: -11.76144}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1220,9 +1222,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0.1, y: 0.5, z: 0.3}
   ShoulderOffset: {x: 0.5, y: 0, z: 0}
-  VerticalArmLength: 2.36
+  VerticalArmLength: 3
   CameraSide: 0.5
-  CameraDistance: 2
+  CameraDistance: 4
   AvoidObstacles:
     Enabled: 0
     CollisionFilter:
@@ -1772,7 +1774,7 @@ MonoBehaviour:
       LookAtTarget: {fileID: 0}
       CustomLookAtTarget: 0
   DefaultBlend:
-    Style: 1
+    Style: 0
     Time: 0.5
     CustomCurve:
       serializedVersion: 2
@@ -1799,12 +1801,24 @@ MonoBehaviour:
     HashOfParent: 774505724
   - Hash: -1898447865
     HashOfParent: 774505724
-  - Hash: 84816746
-    HashOfParent: 774505724
   - Hash: -1569853347
     HashOfParent: 774505724
   - Hash: -1417924328
     HashOfParent: 774505724
+  - Hash: -1396286420
+    HashOfParent: 774505724
+  - Hash: 287799505
+    HashOfParent: -1396286420
+  - Hash: -985688995
+    HashOfParent: -1396286420
+  - Hash: -1484918447
+    HashOfParent: -1396286420
+  - Hash: 1040394028
+    HashOfParent: -1396286420
+  - Hash: -204661628
+    HashOfParent: -1396286420
+  - Hash: -809432954
+    HashOfParent: -1396286420
   - Hash: 2109459564
     HashOfParent: 756556552
   - Hash: -700285193
@@ -1817,6 +1831,16 @@ MonoBehaviour:
     HashOfParent: 2109459564
   - Hash: -762895112
     HashOfParent: 2109459564
+  - Hash: 2100450576
+    HashOfParent: 2109459564
+  - Hash: -1920738110
+    HashOfParent: 2100450576
+  - Hash: 857655
+    HashOfParent: 2100450576
+  - Hash: 593433643
+    HashOfParent: 2100450576
+  - Hash: -1229261932
+    HashOfParent: 2100450576
   m_LegacyLookAt: {fileID: 0}
   m_LegacyFollow: {fileID: 0}
 --- !u!4 &1843720816
