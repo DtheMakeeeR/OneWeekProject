@@ -44,5 +44,10 @@ namespace WeekProject
         {
             return new PlayerFreeState(_context, this);
         }
+
+        public PlayerBaseState Attack()
+        {
+            return new PlayerAttackState(_context, this);
+        }
     }
 }

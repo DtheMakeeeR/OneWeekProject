@@ -61,6 +61,7 @@ namespace WeekProject
         int _isJumpingHash;
         int _isFallingHash;
         int _isLockedHash;
+        int _isAttackingHash;
         int _mirrorSideWalkHash;
         int _XDirHash;
         int _ZDirHash;
@@ -95,7 +96,8 @@ namespace WeekProject
 
 
         public bool IsJumpPressed { get => _isJumpPressed; set => _isJumpPressed = value; }
-
+        public bool IsAttacking { get => _isAttacking; set => _isAttacking = value; }
+        public int IsAttackingHash { get => _isAttackingHash; set => _isAttackingHash = value; }
 
         private void Awake()
         {
@@ -104,6 +106,7 @@ namespace WeekProject
             _isJumpingHash = Animator.StringToHash("isJumping");
             _isFallingHash = Animator.StringToHash("isFalling");
             _isLockedHash = Animator.StringToHash("isLocked");
+            _isAttackingHash = Animator.StringToHash("isAttacking");
             _mirrorSideWalkHash = Animator.StringToHash("mirrorSideWalk");
             _ZDirHash = Animator.StringToHash("ZDir");
             _XDirHash = Animator.StringToHash("XDir");
@@ -151,6 +154,10 @@ namespace WeekProject
 
         private void HandleRotation()
         {
+            if(IsAttacking)
+            {
+                return;
+            }
             Vector3 positionToLookAt;
             if (CameraController.IsLocked && !_needToRotate)
             {

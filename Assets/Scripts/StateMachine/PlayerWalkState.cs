@@ -9,7 +9,11 @@ namespace WeekProject
 
         public override void CheckSwitchStates()
         {
-            if (Controller.IsMovementPressed && Controller.IsSprintPressed)
+            if (Controller.IsAttacking)
+            {
+                SwitchState(Factory.Attack());
+            }
+            else if (Controller.IsMovementPressed && Controller.IsSprintPressed)
             {
                 SwitchState(Factory.Sprint());
             }
