@@ -54,14 +54,16 @@ namespace WeekProject
                 {
                     _orbitalFollow.enabled = false;
                     _rotationComposer.enabled = false;
-                    _freeCinemachine.enabled = false;
+                    _freeCinemachine.gameObject.SetActive(false);
+                    _lockedCinemachine.gameObject.SetActive(true);
                     //_freeCinemachine.enabled = false;
                 }
                 else
                 {
                     _orbitalFollow.enabled = true;
                     _rotationComposer.enabled = true;
-                    _freeCinemachine.enabled = true;
+                    _freeCinemachine.gameObject.SetActive(true);
+                    _lockedCinemachine.gameObject.SetActive(false);
                     _target = null;
                     //_freeCinemachine.enabled = true;
                     _lockedCinemachine.Target.LookAtTarget = _player;

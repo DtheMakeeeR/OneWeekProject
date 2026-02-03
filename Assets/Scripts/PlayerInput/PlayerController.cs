@@ -122,10 +122,10 @@ namespace WeekProject
                 
                 _animator.SetBool(MirrorSideWalk, direction.x < 0);
                 _animator.SetFloat(_XDirHash, direction.x);          
-                _animator.SetFloat(_ZDirHash, direction.y);          
-                //Debug.Log($"direction.x: {direction.x}");
-                //Debug.Log($"direction.y: {direction.y}");
-                //Debug.Log($"_moveInput1: {_moveInput}");
+                _animator.SetFloat(_ZDirHash, direction.y);
+                Debug.Log($"direction.x: {direction.x}");
+                Debug.Log($"direction.y: {direction.y}");
+                Debug.Log($"_moveInput1: {_moveInput}");
                 _moveInput = _moveInput.With(y: 0).normalized.With(y: _moveInput.y);
                 //Debug.Log($"_moveInput2: {_moveInput}");
                 _isMovementPressed = _moveInput.With(y:0).magnitude > 0.01f;

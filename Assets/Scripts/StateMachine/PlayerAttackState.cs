@@ -6,7 +6,7 @@ namespace WeekProject
     public class PlayerAttackState : PlayerBaseState
     {
         bool _isAnimationEnd = false;
-        float ANIMATION_DUR = 0.7f;
+        float ANIMATION_DUR = 0.8f;
         public PlayerAttackState(PlayerStateMachine ctx, PlayerStateFactory factory, bool isRoot = true)
             : base(ctx, factory, isRoot) { }
         public override void CheckSwitchStates()
@@ -31,12 +31,14 @@ namespace WeekProject
 
         public override void EnterState()
         {
+            Debug.Log("Enter Attack");
             Timing.RunCoroutine(_AnimCoroutine());
             Controller.Animator.SetBool(Controller.IsAttackingHash, true);
         }
 
         public override void ExitState()
         {
+            Debug.Log("Exit Attack");
             Controller.Animator.SetBool(Controller.IsAttackingHash, false);
 
         }
@@ -48,9 +50,9 @@ namespace WeekProject
 
         public override void UpdateState()
         {
+            Debug.Log("ATTACK UPDATE");
             CheckSwitchStates();
-            Controller.MoveInputX = 0f;
-            Controller.MoveInputZ = 0f;
+            Controller.MoveSpeed = 0f;
         }
         IEnumerator<float> _AnimCoroutine()
         {

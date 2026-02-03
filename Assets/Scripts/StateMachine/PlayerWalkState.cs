@@ -42,6 +42,7 @@ namespace WeekProject
 
         public override void UpdateState()
         {
+            Debug.Log($"WALK UPDATE X:{Controller.MoveInputX} Z:{Controller.MoveInputZ}");
             CheckSwitchStates();
             Controller.MoveSpeed = Controller.WalkSpeed;
         }

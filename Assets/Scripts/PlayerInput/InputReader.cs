@@ -35,7 +35,6 @@ namespace WeekProject
         public void OnMove(InputAction.CallbackContext context)
         {
             Move?.Invoke(context.ReadValue<Vector2>());
-            Debug.Log("MOVING");
         }
 
         public void OnAttack(InputAction.CallbackContext context)

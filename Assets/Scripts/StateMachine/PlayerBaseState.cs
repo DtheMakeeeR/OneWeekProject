@@ -49,6 +49,7 @@ namespace WeekProject
             {
                 CurrentSuperState?.SetSubState(newState);
             }
+            CurrentSubState?.ExitState();
         }
         protected void SetSuperState(PlayerBaseState newSuperState)
         {
