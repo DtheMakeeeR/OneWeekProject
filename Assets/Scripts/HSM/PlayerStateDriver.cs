@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using Utilities;
 using WeekProject;
 
@@ -50,6 +51,7 @@ namespace HSM {
             _input.Lock += () =>
             {
                 _camController.FindTarget();
+                ctx.anim.SetBool("isLocked", _camController.IsLocked);
             };
             _rb = gameObject.GetOrAdd<Rigidbody>();
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
@@ -94,6 +96,7 @@ namespace HSM {
         void FixedUpdate() {
             var v = _rb.linearVelocity;
             var convertedVel = ConvertToCameraSpace(ctx.velocity);
+            var normalizedMove = ConvertToCameraSpace(ctx.move).normalized;
             //v.x = ctx.velocity.x;
             //v.z = ctx.velocity.z;
             if(ctx.IsNeedChangeVel)
@@ -110,8 +113,9 @@ namespace HSM {
             //Debug.Log($"###ctx.velocity.z: {ctx.velocity.z}");
             var maxSpeed = (ctx.moveSpeed * ctx.sprintCoef);
             var normalized = _rb.linearVelocity.normalized;
-            var XDIr = normalized.x;// Helpers.Remap(ctx.velocity.x, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
-            var ZDIr = normalized.z; //Helpers.Remap(ctx.velocity.z, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
+            Debug.Log($"### ctx.move:{ctx.move} normalizedMove:{normalizedMove}");
+            var XDIr = normalizedMove.x;// Helpers.Remap(ctx.velocity.x, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
+            var ZDIr = normalizedMove.z; //Helpers.Remap(ctx.velocity.z, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
             var speedNormalized = _rb.linearVelocity.magnitude / maxSpeed;
             ctx.anim.SetFloat("XDir", XDIr);
             ctx.anim.SetFloat("ZDir", ZDIr);
