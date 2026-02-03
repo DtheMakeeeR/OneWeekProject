@@ -479,7 +479,7 @@ MonoBehaviour:
   _lockedCinemachine: {fileID: 1299970286}
   _orbitalFollow: {fileID: 1458177969}
   _rotationComposer: {fileID: 1458177970}
-  _player: {fileID: 471807649}
+  _player: {fileID: 1651525879}
   _cameraOfset: {x: 0, y: 2, z: -2}
   _smooth: 0.01
   _findingRange: 20
@@ -1543,11 +1543,11 @@ Transform:
   m_GameObject: {fileID: 1299970283}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22975294, y: -0, z: -0, w: 0.973249}
-  m_LocalPosition: {x: 2.44561, y: 4.9488096, z: -11.76144}
+  m_LocalPosition: {x: 0, y: 6.41, z: -1.0500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1843720816}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 10.624, y: 0, z: 0}
 --- !u!114 &1299970285
 MonoBehaviour:
@@ -1719,11 +1719,11 @@ Transform:
   m_GameObject: {fileID: 1458177964}
   serializedVersion: 2
   m_LocalRotation: {x: 0.342148, y: 0.0000000011848457, z: -5.5571936e-10, w: 0.9396461}
-  m_LocalPosition: {x: 3.02461, y: 3.5166333, z: -14.526308}
+  m_LocalPosition: {x: 0.579, y: 4.9778233, z: -3.814868}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1843720816}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 10.624, y: 0, z: 0}
 --- !u!114 &1458177967
 MonoBehaviour:
@@ -2166,7 +2166,7 @@ MonoBehaviour:
     rb: {fileID: 1651525876}
     renderer: {fileID: 0}
     IsNeedChangeVel: 1
-    IsNeedRotation: 0
+    IsNeedRotation: 1
     sprintPressed: 0
   groundCheck: {fileID: 1196356801}
   groundRadius: 0.2
@@ -2176,6 +2176,7 @@ MonoBehaviour:
   drawGizmos: 1
   _input: {fileID: 11400000, guid: 887743bb0d143ff488f6ce545c26151d, type: 2}
   _cam: {fileID: 330585545}
+  _camController: {fileID: 330585549}
   _rotationFactorPerFrame: 0.15
 --- !u!136 &1651525878
 CapsuleCollider:
@@ -2394,7 +2395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1843720815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2514,9 +2515,7 @@ Transform:
   m_LocalPosition: {x: -2.44561, y: 1.46119, z: 10.71144}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1458177966}
-  - {fileID: 1299970284}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1905010824
@@ -2665,6 +2664,8 @@ SceneRoots:
   - {fileID: 979465711}
   - {fileID: 176172130}
   - {fileID: 1477879615}
+  - {fileID: 1458177966}
+  - {fileID: 1299970284}
   - {fileID: 1843720816}
   - {fileID: 1651525879}
   - {fileID: 1170090227}

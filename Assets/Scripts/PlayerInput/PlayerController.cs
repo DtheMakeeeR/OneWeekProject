@@ -140,7 +140,6 @@ namespace WeekProject
             };
             _input.Lock += () =>
             {
-                Debug.Log("LOCK PRESSED");
                 _cameraController.FindTarget();
             };
             _input.EnablePlayerActions();

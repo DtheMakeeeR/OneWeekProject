@@ -9,14 +9,14 @@ namespace HSM {
             this.ctx = ctx;
             Add(new AnimatorBoolActivity(ctx.anim, "isMoving", true, false));
         }
-        protected override void OnEnter()
-        {
-            ctx.IsNeedRotation = true;
-        }
-        protected override void OnExit()
-        {
-            ctx.IsNeedRotation = false;
-        }
+        //protected override void OnEnter()
+        //{
+        //    ctx.IsNeedRotation = true;
+        //}
+        //protected override void OnExit()
+        //{
+        //    ctx.IsNeedRotation = false;
+        //}
         protected override State GetTransition() {
 
             if (ctx.jumpPressed)

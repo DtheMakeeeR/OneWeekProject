@@ -18,6 +18,8 @@ namespace HSM {
         InputReader _input;
         [SerializeField]
         Camera _cam;
+        [SerializeField]
+        CameraController _camController;
 
         [Header("Rotation")]
         [SerializeField, Range(0.1f, 1f)]
@@ -44,6 +46,10 @@ namespace HSM {
             _input.Sprint += val =>
             {
                 ctx.sprintPressed = val;
+            };
+            _input.Lock += () =>
+            {
+                _camController.FindTarget();
             };
             _rb = gameObject.GetOrAdd<Rigidbody>();
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
@@ -125,11 +131,21 @@ namespace HSM {
 
         void HandleRotation()
         {
-            if(!ctx.IsMoveInput)
+            Debug.Log($"!ctx.IsMoveInput && !_camController.IsLocked: {!ctx.IsMoveInput} && {!_camController.IsLocked}");
+            if (!ctx.IsMoveInput && !_camController.IsLocked)
             {
+                Debug.Log($"RETURNED ROT islocked:{_camController.IsLocked}");
                 return;
             }
-            Vector3 lookAtPos = _rb.linearVelocity.With(y: 0).normalized;
+            Vector3 lookAtPos;
+            if(_camController.IsLocked)
+            {
+                lookAtPos = _camController.Target.position.With(y: 0) - transform.position.With(y: 0);
+            }
+            else
+            {
+                lookAtPos = _rb.linearVelocity.With(y: 0).normalized;
+            }
             Quaternion curRot = transform.rotation;
             Quaternion targetRot = Quaternion.LookRotation(lookAtPos);
             transform.rotation = Quaternion.Slerp(curRot, targetRot, _rotationFactorPerFrame);
@@ -170,7 +186,7 @@ namespace HSM {
 
         public bool IsNeedChangeVel = true;
         public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;
-        public bool IsNeedRotation;
+        public bool IsNeedRotation = true;
         public bool sprintPressed;
 
         public bool IsFalling => rb.linearVelocity.y < 0;
