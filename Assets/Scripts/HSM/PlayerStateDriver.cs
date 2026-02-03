@@ -90,9 +90,12 @@ namespace HSM {
             var convertedVel = ConvertToCameraSpace(ctx.velocity);
             //v.x = ctx.velocity.x;
             //v.z = ctx.velocity.z;
-            v.x = convertedVel.x;
-            v.z = convertedVel.z;
-            _rb.linearVelocity = v;
+            if(ctx.IsNeedChangeVel)
+            {
+                v.x = convertedVel.x;
+                v.z = convertedVel.z;
+                _rb.linearVelocity = v;
+            }
             Debug.Log($"_rb.linearVelocity{_rb.linearVelocity}");
 
             //ctx.velocity.x = _rb.linearVelocity.x;
@@ -126,7 +129,7 @@ namespace HSM {
             {
                 return;
             }
-            Vector3 lookAtPos = ctx.move.With(y: 0).normalized;
+            Vector3 lookAtPos = _rb.linearVelocity.With(y: 0).normalized;
             Quaternion curRot = transform.rotation;
             Quaternion targetRot = Quaternion.LookRotation(lookAtPos);
             transform.rotation = Quaternion.Slerp(curRot, targetRot, _rotationFactorPerFrame);
@@ -164,6 +167,8 @@ namespace HSM {
         public Animator anim;
         public Rigidbody rb;
         public Renderer renderer;
+
+        public bool IsNeedChangeVel = true;
         public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;
         public bool IsNeedRotation;
         public bool sprintPressed;

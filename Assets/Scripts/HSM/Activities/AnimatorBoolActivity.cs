@@ -24,7 +24,7 @@ namespace HSM
             Debug.Log("ActivateAsync");
             if (this.Mode != ActivityMode.Inactive || _anim == null) return;
             this.Mode = ActivityMode.Activating;
-            Debug.Log("SET BOOL act");
+            Debug.Log($"SET BOOL act {_name}");
             _anim.SetBool(_name, _startVal);
             this.Mode = ActivityMode.Active;
         }
@@ -34,7 +34,7 @@ namespace HSM
             if (this.Mode != ActivityMode.Active || _anim == null) return;
             this.Mode = ActivityMode.Deactivating;
             _anim.SetBool(_name, _endVal);
-            Debug.Log("SET BOOL deact");
+            Debug.Log($"SET BOOL deact {_name}");
             this.Mode = ActivityMode.Inactive;
         }
     }

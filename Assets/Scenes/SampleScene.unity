@@ -2165,6 +2165,7 @@ MonoBehaviour:
     anim: {fileID: 1296775089}
     rb: {fileID: 1651525876}
     renderer: {fileID: 0}
+    IsNeedChangeVel: 1
     IsNeedRotation: 0
     sprintPressed: 0
   groundCheck: {fileID: 1196356801}

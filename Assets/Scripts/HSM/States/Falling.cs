@@ -11,14 +11,14 @@ namespace HSM
             this.ctx = ctx;
             Add(new AnimatorBoolActivity(ctx.anim, "isFalling", true, false));
         }
-        //protected override void OnEnter()
-        //{
-        //    ctx.anim.SetBool("isFalling", true);
-        //}
-        //protected override void OnExit()
-        //{
-        //    ctx.anim.SetBool("isFalling", false);
-        //}
+        protected override void OnEnter()
+        {
+            ctx.IsNeedChangeVel = false;
+        }
+        protected override void OnExit()
+        {
+            ctx.IsNeedChangeVel = true;
+        }
         protected override State GetTransition()
         {
             if (ctx.IsFalling)

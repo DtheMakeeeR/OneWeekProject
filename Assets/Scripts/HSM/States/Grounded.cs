@@ -22,18 +22,18 @@ namespace HSM {
         }
 
         protected override State GetTransition() {
-            if (ctx.jumpPressed) 
-            {
-                ctx.jumpPressed = false;
-                var rb = ctx.rb;
-                if (rb != null)
-                {
-                    var v = rb.linearVelocity;
-                    v.y = ctx.jumpSpeed;
-                    rb.linearVelocity = v;
-                }
-                return ((PlayerRoot)Parent).Airborne.Jump;
-            }
+            //if (ctx.jumpPressed) 
+            //{
+            //    ctx.jumpPressed = false;
+            //    var rb = ctx.rb;
+            //    if (rb != null)
+            //    {
+            //        var v = rb.linearVelocity;
+            //        v.y = ctx.jumpSpeed;
+            //        rb.linearVelocity = v;
+            //    }
+            //    return ((PlayerRoot)Parent).Airborne.Jump;
+            //}
             return ctx.grounded ? null : ((PlayerRoot)Parent).Airborne;
         }
     }

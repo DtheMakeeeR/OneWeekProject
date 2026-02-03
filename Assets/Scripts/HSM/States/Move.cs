@@ -18,6 +18,19 @@ namespace HSM {
             ctx.IsNeedRotation = false;
         }
         protected override State GetTransition() {
+
+            if (ctx.jumpPressed)
+            {
+                ctx.jumpPressed = false;
+                var rb = ctx.rb;
+                if (rb != null)
+                {
+                    var v = rb.linearVelocity;
+                    v.y = ctx.jumpSpeed;
+                    rb.linearVelocity = v;
+                }
+                return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
+            }
             if (!ctx.grounded) return ((PlayerRoot)Parent).Airborne;
             
             return !ctx.IsMoveInput ? ((Grounded)Parent).Idle : null;

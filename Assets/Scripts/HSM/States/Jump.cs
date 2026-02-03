@@ -12,15 +12,14 @@ namespace HSM
             this.ctx = ctx;
             Add(new AnimatorBoolActivity(ctx.anim, "isJumping", true, false));
         }
-        //protected override void OnEnter()
-        //{
-        //    ctx.anim.SetBool("isJumping", true);
-        //}
-        //protected override void OnExit()
-        //{
-        //    Debug.Log("EXIT JUMP");
-        //    ctx.anim.SetBool("isJumping", false);
-        //}
+        protected override void OnEnter()
+        {
+            ctx.IsNeedChangeVel = false;
+        }
+        protected override void OnExit()
+        {
+            ctx.IsNeedChangeVel = true;
+        }
         protected override State GetTransition()
         {
             return ctx.IsFalling ? ((Airborne)Parent).Falling : null;
