@@ -16,6 +16,8 @@ namespace HSM {
         [Header("References")]
         [SerializeField]
         InputReader _input;
+        [SerializeField]
+        Camera _cam;
 
         [Header("Rotation")]
         [SerializeField, Range(0.1f, 1f)]
@@ -85,20 +87,23 @@ namespace HSM {
 
         void FixedUpdate() {
             var v = _rb.linearVelocity;
-            v.x = ctx.velocity.x;
-            v.z = ctx.velocity.z;
-            Debug.Log($"ctx.velocity.z{ctx.velocity.z}");
+            var convertedVel = ConvertToCameraSpace(ctx.velocity);
+            //v.x = ctx.velocity.x;
+            //v.z = ctx.velocity.z;
+            v.x = convertedVel.x;
+            v.z = convertedVel.z;
             _rb.linearVelocity = v;
+            Debug.Log($"_rb.linearVelocity{_rb.linearVelocity}");
 
-            ctx.velocity.x = _rb.linearVelocity.x;
-            ctx.velocity.z = _rb.linearVelocity.z;
+            //ctx.velocity.x = _rb.linearVelocity.x;
+            //ctx.velocity.z = _rb.linearVelocity.z;
             //Debug.Log($"###ctx.velocity.x: {ctx.velocity.x}");
             //Debug.Log($"###ctx.velocity.z: {ctx.velocity.z}");
             var maxSpeed = (ctx.moveSpeed * ctx.sprintCoef);
-            var normalized = ctx.velocity.normalized;
+            var normalized = _rb.linearVelocity.normalized;
             var XDIr = normalized.x;// Helpers.Remap(ctx.velocity.x, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
             var ZDIr = normalized.z; //Helpers.Remap(ctx.velocity.z, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
-            var speedNormalized = ctx.velocity.magnitude / maxSpeed;
+            var speedNormalized = _rb.linearVelocity.magnitude / maxSpeed;
             ctx.anim.SetFloat("XDir", XDIr);
             ctx.anim.SetFloat("ZDir", ZDIr);
             ctx.anim.SetFloat("magnitude", speedNormalized);
@@ -129,6 +134,20 @@ namespace HSM {
 
         static string StatePath(State s) {
             return string.Join(" > ", s.PathToRoot().Reverse().Select(n => n.GetType().Name));
+        }
+        private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+        {
+            float curY = vectorToRotate.y;
+            //ignores Y axis and 1f length
+            Vector3 cameraForward = _cam.transform.forward.With(y: 0).normalized;
+            Vector3 cameraRight = _cam.transform.right.With(y: 0).normalized;
+
+            Vector3 cameraForwardZProduct = vectorToRotate.z * cameraForward;
+            Vector3 cameraRightXProduct = vectorToRotate.x * cameraRight;
+
+            Vector3 res = cameraForwardZProduct + cameraRightXProduct;
+            res.y = curY;
+            return res;
         }
     }
 
