@@ -39,6 +39,10 @@ namespace HSM {
             {
                 ctx.jumpPressed = val;
             };
+            _input.Sprint += val =>
+            {
+                ctx.sprintPressed = val;
+            };
             _rb = gameObject.GetOrAdd<Rigidbody>();
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
 
@@ -83,12 +87,21 @@ namespace HSM {
             var v = _rb.linearVelocity;
             v.x = ctx.velocity.x;
             v.z = ctx.velocity.z;
+            Debug.Log($"ctx.velocity.z{ctx.velocity.z}");
             _rb.linearVelocity = v;
 
             ctx.velocity.x = _rb.linearVelocity.x;
             ctx.velocity.z = _rb.linearVelocity.z;
             //Debug.Log($"###ctx.velocity.x: {ctx.velocity.x}");
             //Debug.Log($"###ctx.velocity.z: {ctx.velocity.z}");
+            var maxSpeed = (ctx.moveSpeed * ctx.sprintCoef);
+            var normalized = ctx.velocity.normalized;
+            var XDIr = normalized.x;// Helpers.Remap(ctx.velocity.x, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
+            var ZDIr = normalized.z; //Helpers.Remap(ctx.velocity.z, 0, ctx.moveSpeed * ctx.sprintCoef, 0, 1);
+            var speedNormalized = ctx.velocity.magnitude / maxSpeed;
+            ctx.anim.SetFloat("XDir", XDIr);
+            ctx.anim.SetFloat("ZDir", ZDIr);
+            ctx.anim.SetFloat("magnitude", speedNormalized);
             if (ctx.IsNeedRotation)
             {
                 HandleRotation();
@@ -125,6 +138,7 @@ namespace HSM {
         public Vector3 velocity;
         public bool grounded;
         public float moveSpeed = 6f;
+        public float sprintCoef = 1.5f;
         public float accel = 40f;
         public float jumpSpeed = 7f;
         public bool jumpPressed;
@@ -133,6 +147,8 @@ namespace HSM {
         public Renderer renderer;
         public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;
         public bool IsNeedRotation;
+        public bool sprintPressed;
+
         public bool IsFalling => rb.linearVelocity.y < 0;
     }
 }

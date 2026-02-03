@@ -7,6 +7,7 @@ namespace HSM {
 
         public Move(StateMachine m, State parent, PlayerContext ctx) : base(m, parent) {
             this.ctx = ctx;
+            Add(new AnimatorBoolActivity(ctx.anim, "isMoving", true, false));
         }
         protected override void OnEnter()
         {
@@ -23,8 +24,9 @@ namespace HSM {
         }
 
         protected override void OnUpdate(float deltaTime) {
-            var targetX = ctx.move.x * ctx.moveSpeed;
-            var targetZ = ctx.move.z * ctx.moveSpeed;
+            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+            var targetX = ctx.move.x * ctx.moveSpeed * coef;
+            var targetZ = ctx.move.z * ctx.moveSpeed * coef;
             ctx.velocity.x = Mathf.MoveTowards(ctx.velocity.x, targetX, ctx.accel * deltaTime);
             ctx.velocity.z = Mathf.MoveTowards(ctx.velocity.z, targetZ, ctx.accel * deltaTime);
         }

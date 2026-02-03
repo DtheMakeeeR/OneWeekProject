@@ -21,15 +21,12 @@ namespace HSM
         //}
         protected override State GetTransition()
         {
-            Debug.Log($"falling yVel:{ctx.rb.linearVelocity.y}");
             if (ctx.IsFalling)
             {
-                Debug.Log($"falling IsFalling:{ctx.IsFalling} returned null");
                 return null;
             }
             else
             {
-                Debug.Log($"falling IsFalling:{ctx.IsFalling} returned grounded");
                 return ((PlayerRoot)((Airborne)Parent).Parent).Grounded;
             }
         }
