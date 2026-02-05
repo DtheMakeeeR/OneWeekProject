@@ -59,6 +59,8 @@ namespace HSM {
         protected override void OnEnter()
         {
             ctx.IsNeedRotation = false;
+            ctx.swordHitBox.Refresh();
+            ctx.swordHitBox.IsActive = true;
             ctx.velocity.x = 0f;
             ctx.velocity.z = 0f;
             Timing.RunCoroutine(_FlagCoroutine());
@@ -67,6 +69,7 @@ namespace HSM {
         {
             _flag = false;
             ctx.IsNeedRotation = true;
+            ctx.swordHitBox.IsActive = false;
         }
         IEnumerator<float> _FlagCoroutine()
         {

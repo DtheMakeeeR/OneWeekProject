@@ -1089,6 +1089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeekProject.HitBox
   _damageOnCollide: 5
   _isActive: 1
+  Hitted: []
 --- !u!65 &1006131100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1962,20 +1963,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HSM.PlayerStateDriver
   ctx:
     move: {x: 0, y: 0, z: 0}
-    velocity: {x: 0, y: 0, z: 0}
-    grounded: 0
+    CameraSpaceMove: {x: 0, y: 0, z: 0}
     moveSpeed: 6
     sprintCoef: 1.5
     accel: 40
     jumpSpeed: 7
-    jumpPressed: 0
+    dodgeSpeed: 10
+    velocity: {x: 0, y: 0, z: 0}
     anim: {fileID: 1296775089}
     rb: {fileID: 1651525876}
     renderer: {fileID: 0}
-    IsNeedChangeVel: 1
+    swordHitBox: {fileID: 1006131099}
+    IsGrounded: 0
     IsNeedRotation: 1
-    sprintPressed: 0
+    IsSprinting: 0
     IsAttacking: 0
+    IsJumping: 0
+    IsDodging: 0
+    IsNeedChangeVel: 1
+    CameraForward: {x: 0, y: 0, z: 0}
   groundCheck: {fileID: 1196356801}
   groundRadius: 0.2
   groundMask:

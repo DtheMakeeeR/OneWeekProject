@@ -204,6 +204,7 @@ namespace HSM {
         public Animator anim;
         public Rigidbody rb;
         public Renderer renderer;
+        public HitBox swordHitBox;
 
         [Header("Flags")]
         public bool IsGrounded;
