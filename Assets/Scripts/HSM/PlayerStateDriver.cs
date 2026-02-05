@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -21,12 +23,13 @@ namespace HSM {
         Camera _cam;
         [SerializeField]
         CameraController _camController;
+        [SerializeField]
+        Rigidbody _rb;
 
         [Header("Rotation")]
         [SerializeField, Range(0.1f, 1f)]
         float _rotationFactorPerFrame;
 
-        Rigidbody _rb;
         StateMachine _machine;
         State _root;
         string _lastPath;
@@ -58,26 +61,25 @@ namespace HSM {
                 _camController.FindTarget();
                 ctx.anim.SetBool("isLocked", _camController.IsLocked);
             };
-            _rb = gameObject.GetOrAdd<Rigidbody>();
+            _input.Attack += val =>
+            {
+                ctx.IsAttacking = val;
+            };
+
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
 
-            ctx.rb = _rb;
-            ctx.anim = GetComponentInChildren<Animator>();
-            ctx.renderer = GetComponent<Renderer>();
 
             _root = new PlayerRoot(null, ctx);
             var builder = new StateMachineBuilder(_root);
             _machine = builder.Build();
-            
+            _input.EnablePlayerActions();
+
             // fallback: create a groundCheck just below the collider's bounds
-            if (groundCheck == null) {
-                var col = GetComponent<Collider>();
-                var t = new GameObject("groundCheck").transform;
-                t.SetParent(transform, false);
-                var y = col ? (-col.bounds.extents.y + 0.01f) : -0.5f;
-                t.localPosition = new Vector3(0, y, 0);
-                groundCheck = t;
-            }
+        }
+
+        private void Start()
+        {
+            
         }
 
         void Update() {
@@ -95,18 +97,14 @@ namespace HSM {
                 Debug.Log("State" + path);
                 _lastPath = path;
             }
-            _input.EnablePlayerActions();
         }
 
-        void FixedUpdate() {
+        void FixedUpdate()
+        {
             var v = _rb.linearVelocity;
             var convertedVel = ConvertToCameraSpace(ctx.velocity);
-            var normalizedMove = ConvertToCameraSpace(ctx.move).normalized;
-            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
-            var XDir = Helpers.Remap(ctx.move.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
-            var ZDir = Helpers.Remap(ctx.move.z * coef, 0, 1 * ctx.sprintCoef, 0, 1);
-            ctx.anim.SetFloat("XDir", XDir);
-            ctx.anim.SetFloat("ZDir", ZDir);
+
+
             //if true will change direction with camera rotation
             //else will contain move diraciton
             if (ctx.IsNeedChangeVel)
@@ -115,20 +113,28 @@ namespace HSM {
                 v.z = convertedVel.z;
                 _rb.linearVelocity = v;
             }
-            Debug.Log($"_rb.linearVelocity{_rb.linearVelocity}");
 
-            var maxSpeed = (ctx.moveSpeed * ctx.sprintCoef);
-            var normalized = _rb.linearVelocity.normalized;
-            Debug.Log($"### ctx.move:{ctx.move} normalizedMove:{normalizedMove}");
-            var speedNormalized = _rb.linearVelocity.magnitude / maxSpeed;
-            ctx.anim.SetFloat("magnitude", speedNormalized);
+            SetAnimParameters();
+
             if (ctx.IsNeedRotation)
             {
                 HandleRotation();
             }
         }
 
-            void OnDrawGizmosSelected() {
+        private void SetAnimParameters()
+        {
+            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+            var XDir = Helpers.Remap(ctx.move.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+            var ZDir = Helpers.Remap(ctx.move.z * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+            ctx.anim.SetFloat("XDir", XDir);
+            ctx.anim.SetFloat("ZDir", ZDir);
+            var maxSpeed = (ctx.moveSpeed * ctx.sprintCoef);
+            var speedNormalized = _rb.linearVelocity.magnitude / maxSpeed;
+            ctx.anim.SetFloat("magnitude", speedNormalized);
+        }
+
+        void OnDrawGizmosSelected() {
             if (!drawGizmos || groundCheck == null) return;
 
             Gizmos.color = Color.white;
@@ -195,6 +201,7 @@ namespace HSM {
         public bool IsNeedRotation = true;
         public bool sprintPressed;
 
+        public bool IsAttacking = false;
         public bool IsFalling => rb.linearVelocity.y < 0;
     }
 }

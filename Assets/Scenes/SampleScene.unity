@@ -1975,6 +1975,7 @@ MonoBehaviour:
     IsNeedChangeVel: 1
     IsNeedRotation: 1
     sprintPressed: 0
+    IsAttacking: 0
   groundCheck: {fileID: 1196356801}
   groundRadius: 0.2
   groundMask:
@@ -1984,6 +1985,7 @@ MonoBehaviour:
   _input: {fileID: 11400000, guid: 887743bb0d143ff488f6ce545c26151d, type: 2}
   _cam: {fileID: 330585545}
   _camController: {fileID: 330585549}
+  _rb: {fileID: 1651525876}
   _rotationFactorPerFrame: 0.15
 --- !u!136 &1651525878
 CapsuleCollider:

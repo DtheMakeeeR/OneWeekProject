@@ -23,6 +23,10 @@ namespace HSM {
                 //}
                 return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
             }
+            else if(ctx.IsAttacking)
+            {
+                return ((PlayerRoot)((Grounded)Parent).Parent).Attacking.GroundAttack;
+            }
             return ctx.IsMoveInput ? ((Grounded)Parent).Move : null;
         }
 
