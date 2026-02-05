@@ -34,14 +34,7 @@ namespace HSM {
 
 
         void Awake() {
-            _input.Move += direction =>
-            {
-                ctx.move.x = direction.x;
-                ctx.move.z = direction.y;
-                ctx.anim.SetFloat("XDir", direction.x);
-                ctx.anim.SetFloat("ZDir", direction.y);
-                //_isMovementPressed = _moveInput.With(y: 0).magnitude > 0.01f;
-            };
+            
             _input.Jump += val =>
             {
                 ctx.jumpPressed = val;
@@ -49,6 +42,16 @@ namespace HSM {
             _input.Sprint += val =>
             {
                 ctx.sprintPressed = val;
+            };
+            _input.Move += direction =>
+            {
+                ctx.move.x = direction.x;
+                ctx.move.z = direction.y;
+                //var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+                //var XDir = Helpers.Remap(direction.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+                //var ZDir = Helpers.Remap(direction.y * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+                //ctx.anim.SetFloat("XDir", XDir);
+                //ctx.anim.SetFloat("ZDir", ZDir);
             };
             _input.Lock += () =>
             {
@@ -99,8 +102,12 @@ namespace HSM {
             var v = _rb.linearVelocity;
             var convertedVel = ConvertToCameraSpace(ctx.velocity);
             var normalizedMove = ConvertToCameraSpace(ctx.move).normalized;
-            
-            if(ctx.IsNeedChangeVel)
+            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+            var XDir = Helpers.Remap(ctx.move.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+            var ZDir = Helpers.Remap(ctx.move.z * coef, 0, 1 * ctx.sprintCoef, 0, 1);
+            ctx.anim.SetFloat("XDir", XDir);
+            ctx.anim.SetFloat("ZDir", ZDir);
+            if (ctx.IsNeedChangeVel)
             {
                 v.x = convertedVel.x;
                 v.z = convertedVel.z;
