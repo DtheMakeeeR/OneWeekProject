@@ -21,14 +21,14 @@ namespace HSM {
 
             if (ctx.jumpPressed)
             {
-                ctx.jumpPressed = false;
-                var rb = ctx.rb;
-                if (rb != null)
-                {
-                    var v = rb.linearVelocity;
-                    v.y = ctx.jumpSpeed;
-                    rb.linearVelocity = v;
-                }
+                //ctx.jumpPressed = false;
+                //var rb = ctx.rb;
+                //if (rb != null)
+                //{
+                //    var v = rb.linearVelocity;
+                //    v.y = ctx.jumpSpeed;
+                //    rb.linearVelocity = v;
+                //}
                 return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
             }
             if (!ctx.grounded) return ((PlayerRoot)Parent).Airborne;

@@ -107,6 +107,8 @@ namespace HSM {
             var ZDir = Helpers.Remap(ctx.move.z * coef, 0, 1 * ctx.sprintCoef, 0, 1);
             ctx.anim.SetFloat("XDir", XDir);
             ctx.anim.SetFloat("ZDir", ZDir);
+            //if true will change direction with camera rotation
+            //else will contain move diraciton
             if (ctx.IsNeedChangeVel)
             {
                 v.x = convertedVel.x;

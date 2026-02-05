@@ -14,6 +14,14 @@ namespace HSM
         }
         protected override void OnEnter()
         {
+            ctx.jumpPressed = false;
+            var rb = ctx.rb;
+            if (rb != null)
+            {
+                var v = rb.linearVelocity;
+                v.y = ctx.jumpSpeed;
+                rb.linearVelocity = v;
+            }
             ctx.IsNeedChangeVel = false;
         }
         protected override void OnExit()
