@@ -5,11 +5,13 @@ namespace HSM {
         readonly PlayerContext ctx;
         public readonly Idle Idle;
         public readonly Move Move;
+        public readonly RollDodge Dodge;
 
         public Grounded(StateMachine m, State parent, PlayerContext ctx) : base(m, parent) {
             this.ctx = ctx;
             Idle = new Idle(m, this, ctx);
             Move = new Move(m, this, ctx);
+            Dodge = new RollDodge(m, this, ctx);
             Add(new ColorPhaseActivity(ctx.renderer){
                 enterColor = Color.yellow,  // runs while Grounded is activating
             });
@@ -34,7 +36,7 @@ namespace HSM {
             //    }
             //    return ((PlayerRoot)Parent).Airborne.Jump;
             //}
-            return ctx.grounded ? null : ((PlayerRoot)Parent).Airborne;
+            return ctx.IsGrounded ? null : ((PlayerRoot)Parent).Airborne;
         }
     }
 }

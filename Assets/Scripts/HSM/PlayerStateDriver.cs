@@ -40,16 +40,17 @@ namespace HSM {
             
             _input.Jump += val =>
             {
-                ctx.jumpPressed = val;
+                ctx.IsJumping = val;
             };
             _input.Sprint += val =>
             {
-                ctx.sprintPressed = val;
+                ctx.IsSprinting = val;
             };
             _input.Move += direction =>
             {
                 ctx.move.x = direction.x;
                 ctx.move.z = direction.y;
+                ctx.CameraSpaceMove = ConvertToCameraSpace(ctx.move);
                 //var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
                 //var XDir = Helpers.Remap(direction.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
                 //var ZDir = Helpers.Remap(direction.y * coef, 0, 1 * ctx.sprintCoef, 0, 1);
@@ -60,6 +61,10 @@ namespace HSM {
             {
                 _camController.FindTarget();
                 ctx.anim.SetBool("isLocked", _camController.IsLocked);
+            };
+            _input.Dodge += val =>
+            {
+                ctx.IsDodging = val;
             };
             _input.Attack += val =>
             {
@@ -86,7 +91,7 @@ namespace HSM {
             ctx.move.x = Mathf.Clamp(ctx.move.x, -1f, 1f);
             ctx.move.z = Mathf.Clamp(ctx.move.z, -1f, 1f);
 
-            ctx.grounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundMask);
+            ctx.IsGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundMask);
             //Debug.Log($"###CheckSphere:{Physics.CheckSphere(groundCheck.position, groundRadius, groundMask)}");
             //Debug.Log($"###Mathf.Abs(_rb.linearVelocity.y):{Mathf.Abs(_rb.linearVelocity.y)}");
             _machine.Tick(Time.deltaTime);
@@ -97,6 +102,7 @@ namespace HSM {
                 Debug.Log("State" + path);
                 _lastPath = path;
             }
+            ctx.CameraForward = ConvertToCameraSpace(Vector3.forward);
         }
 
         void FixedUpdate()
@@ -124,7 +130,7 @@ namespace HSM {
 
         private void SetAnimParameters()
         {
-            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+            var coef = ctx.IsSprinting ? ctx.sprintCoef : 1;
             var XDir = Helpers.Remap(ctx.move.x * coef, 0, 1 * ctx.sprintCoef, 0, 1);
             var ZDir = Helpers.Remap(ctx.move.z * coef, 0, 1 * ctx.sprintCoef, 0, 1);
             ctx.anim.SetFloat("XDir", XDir);
@@ -166,7 +172,7 @@ namespace HSM {
         static string StatePath(State s) {
             return string.Join(" > ", s.PathToRoot().Reverse().Select(n => n.GetType().Name));
         }
-        private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+        public Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
         {
             float curY = vectorToRotate.y;
             //ignores Y axis and 1f length
@@ -184,24 +190,33 @@ namespace HSM {
 
     [Serializable]
     public class PlayerContext {
+        [Header("Movement")]
         public Vector3 move;
-        public Vector3 velocity;
-        public bool grounded;
+        public Vector3 CameraSpaceMove;
         public float moveSpeed = 6f;
         public float sprintCoef = 1.5f;
         public float accel = 40f;
         public float jumpSpeed = 7f;
-        public bool jumpPressed;
+        public float dodgeSpeed;
+        public Vector3 velocity;
+
+        [Header("References")]
         public Animator anim;
         public Rigidbody rb;
         public Renderer renderer;
 
-        public bool IsNeedChangeVel = true;
-        public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;
+        [Header("Flags")]
+        public bool IsGrounded;
         public bool IsNeedRotation = true;
-        public bool sprintPressed;
+        public bool IsSprinting = false;
 
         public bool IsAttacking = false;
+        public bool IsJumping = false;
+        public bool IsDodging = false;
+        public bool IsNeedChangeVel = true;
+        public Vector3 CameraForward;
+
+        public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;
         public bool IsFalling => rb.linearVelocity.y < 0;
     }
 }

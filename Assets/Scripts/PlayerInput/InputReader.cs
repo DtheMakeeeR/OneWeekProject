@@ -18,6 +18,7 @@ namespace WeekProject
         public UnityAction<bool> Attack = delegate { };
         public UnityAction<bool> Sprint = delegate { };
         public UnityAction Lock = delegate { };
+        public UnityAction<bool> Dodge = delegate { };
 
         InputSystem_Actions _inputActions;
         public Vector2 Direction => _inputActions.Player.Move.ReadValue<Vector2>();
@@ -113,6 +114,20 @@ namespace WeekProject
                     break;
                 default:
                     Lock?.Invoke();
+                    break;
+            }
+        }
+
+        public void OnDodge(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                case InputActionPhase.Performed:
+                    Dodge?.Invoke(true);
+                    break;
+                default:
+                    Dodge?.Invoke(false);
                     break;
             }
         }

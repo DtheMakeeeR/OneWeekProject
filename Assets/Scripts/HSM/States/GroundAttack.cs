@@ -56,8 +56,9 @@ namespace HSM {
             return null;
         }
 
-        protected override void OnEnter() {
-
+        protected override void OnEnter()
+        {
+            ctx.IsNeedRotation = false;
             ctx.velocity.x = 0f;
             ctx.velocity.z = 0f;
             Timing.RunCoroutine(_FlagCoroutine());
@@ -65,6 +66,7 @@ namespace HSM {
         protected override void OnExit()
         {
             _flag = false;
+            ctx.IsNeedRotation = true;
         }
         IEnumerator<float> _FlagCoroutine()
         {

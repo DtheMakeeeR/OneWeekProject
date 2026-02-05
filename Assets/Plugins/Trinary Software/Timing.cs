@@ -2508,6 +2508,11 @@ namespace MEC
 
         [System.Obsolete("Just.. no.", true)]
         public new static void print(object message) { }
+
+        public static float WaitForSeconds(object length)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>

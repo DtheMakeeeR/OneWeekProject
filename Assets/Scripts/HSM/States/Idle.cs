@@ -11,7 +11,7 @@ namespace HSM {
 
         protected override State GetTransition()
         {
-            if (ctx.jumpPressed)
+            if (ctx.IsJumping)
             {
                 //ctx.jumpPressed = false;
                 //var rb = ctx.rb;
@@ -26,6 +26,10 @@ namespace HSM {
             else if(ctx.IsAttacking)
             {
                 return ((PlayerRoot)((Grounded)Parent).Parent).Attacking.GroundAttack;
+            }
+            else if(ctx.IsDodging)
+            {
+                return ((Grounded)Parent).Dodge;
             }
             return ctx.IsMoveInput ? ((Grounded)Parent).Move : null;
         }

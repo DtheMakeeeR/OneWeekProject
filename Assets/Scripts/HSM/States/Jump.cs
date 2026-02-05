@@ -14,7 +14,7 @@ namespace HSM
         }
         protected override void OnEnter()
         {
-            ctx.jumpPressed = false;
+            ctx.IsJumping = false;
             var rb = ctx.rb;
             if (rb != null)
             {

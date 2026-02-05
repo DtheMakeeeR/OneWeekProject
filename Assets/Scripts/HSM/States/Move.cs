@@ -19,7 +19,7 @@ namespace HSM {
         //}
         protected override State GetTransition() {
 
-            if (ctx.jumpPressed)
+            if (ctx.IsJumping)
             {
                 //ctx.jumpPressed = false;
                 //var rb = ctx.rb;
@@ -31,13 +31,20 @@ namespace HSM {
                 //}
                 return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
             }
-            if (!ctx.grounded) return ((PlayerRoot)Parent).Airborne;
-            
+            if (!ctx.IsGrounded) return ((PlayerRoot)Parent).Airborne;
+            else if (ctx.IsAttacking)
+            {
+                return ((PlayerRoot)((Grounded)Parent).Parent).Attacking.GroundAttack;
+            }
+            else if (ctx.IsDodging)
+            {
+                return ((Grounded)Parent).Dodge;
+            }
             return !ctx.IsMoveInput ? ((Grounded)Parent).Idle : null;
         }
 
         protected override void OnUpdate(float deltaTime) {
-            var coef = ctx.sprintPressed ? ctx.sprintCoef : 1;
+            var coef = ctx.IsSprinting ? ctx.sprintCoef : 1;
             var targetX = ctx.move.x * ctx.moveSpeed * coef;
             var targetZ = ctx.move.z * ctx.moveSpeed * coef;
             ctx.velocity.x = Mathf.MoveTowards(ctx.velocity.x, targetX, ctx.accel * deltaTime);
