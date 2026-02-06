@@ -32,6 +32,10 @@ namespace HSM {
                 return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
             }
             if (!ctx.IsGrounded) return ((PlayerRoot)Parent).Airborne;
+            else if (ctx.IsHitted)
+            {
+                return ((PlayerRoot)((Grounded)Parent).Parent).Hitted;
+            }
             else if (ctx.IsAttacking)
             {
                 return ((PlayerRoot)((Grounded)Parent).Parent).Attacking.GroundAttack;

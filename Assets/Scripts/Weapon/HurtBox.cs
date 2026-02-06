@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System;
 namespace WeekProject
 {
     [RequireComponent(typeof(Collider), typeof(Rigidbody), typeof(Entity))]
@@ -10,6 +10,7 @@ namespace WeekProject
         Entity _entity;
         [SerializeField]
         bool _isActive = false;
+        public Action Callback;
 
         public bool IsActive { get => _isActive; set => _isActive = value; }
 
@@ -18,6 +19,7 @@ namespace WeekProject
             if(IsActive)
             {
                 _entity.TakeDamage(amount);
+                Callback?.Invoke();
             }            
         }
     }

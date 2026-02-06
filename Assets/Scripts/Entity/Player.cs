@@ -5,8 +5,6 @@ namespace WeekProject
 {
     public class Player : Entity
     {
-        [SerializeField]
-        PlayerController playerController;
         protected override void Die()
         {
             Debug.Log("Player Died");

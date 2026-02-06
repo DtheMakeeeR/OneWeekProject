@@ -23,11 +23,15 @@ namespace HSM {
                 //}
                 return ((PlayerRoot)((Grounded)Parent).Parent).Airborne.Jump;
             }
-            else if(ctx.IsAttacking)
+            else if(ctx.IsHitted)
+            {
+                return ((PlayerRoot)((Grounded)Parent).Parent).Hitted;
+            }
+            else if (ctx.IsAttacking)
             {
                 return ((PlayerRoot)((Grounded)Parent).Parent).Attacking.GroundAttack;
             }
-            else if(ctx.IsDodging)
+            else if (ctx.IsDodging)
             {
                 return ((Grounded)Parent).Dodge;
             }

@@ -25,6 +25,8 @@ namespace HSM {
         CameraController _camController;
         [SerializeField]
         Rigidbody _rb;
+        [SerializeField]
+        HurtBox _hurtBox;
 
         [Header("Rotation")]
         [SerializeField, Range(0.1f, 1f)]
@@ -69,6 +71,10 @@ namespace HSM {
             _input.Attack += val =>
             {
                 ctx.IsAttacking = val;
+            };
+            _hurtBox.Callback += () =>
+            {
+                ctx.IsHitted = true;
             };
 
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
@@ -205,6 +211,7 @@ namespace HSM {
         public Rigidbody rb;
         public Renderer renderer;
         public HitBox swordHitBox;
+        public HurtBox hurtBox;
 
         [Header("Flags")]
         public bool IsGrounded;
@@ -215,6 +222,7 @@ namespace HSM {
         public bool IsJumping = false;
         public bool IsDodging = false;
         public bool IsNeedChangeVel = true;
+        public bool IsHitted = false;
         public Vector3 CameraForward;
 
         public bool IsMoveInput => move.With(y: 0).sqrMagnitude >= 0.01f;

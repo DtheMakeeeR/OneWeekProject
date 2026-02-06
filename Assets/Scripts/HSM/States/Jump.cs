@@ -30,6 +30,10 @@ namespace HSM
         }
         protected override State GetTransition()
         {
+            if (ctx.IsHitted)
+            {
+                return ((PlayerRoot)((Airborne)Parent).Parent).Hitted;
+            }
             return ctx.IsFalling ? ((Airborne)Parent).Falling : null;
         }
     }

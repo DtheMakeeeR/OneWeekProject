@@ -27,7 +27,11 @@ namespace HSM {
 
         protected override State GetTransition()
         {
-            if(!_flag)
+            if (ctx.IsHitted)
+            {
+                return ((PlayerRoot)((Attacking)Parent).Parent).Hitted;
+            }
+            if (!_flag)
             {
                 return null;
             }
